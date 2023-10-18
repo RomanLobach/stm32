@@ -1,0 +1,10 @@
+LaunchTargetManager/org.eclipse.launchbar.core.launchTargetType.local,Local/arch=x86_64
+LaunchTargetManager/org.eclipse.launchbar.core.launchTargetType.local,Local/name=Local
+LaunchTargetManager/org.eclipse.launchbar.core.launchTargetType.local,Local/os=macosx
+activeLaunchTarget=null\:---
+configDescList=org.eclipse.cdt.dsf.gdb.gdbRemotedescriptorType\:F303
+eclipse.preferences.version=1
+org.eclipse.cdt.dsf.gdb.gdbRemotedescriptorType\:F303/activeLaunchMode=run
+org.eclipse.cdt.dsf.gdb.gdbRemotedescriptorType\:F303/activeLaunchTarget=null\:---
+org.eclipse.launchbar.core.descriptorType.default\:F303\ Debug/activeLaunchMode=run
+org.eclipse.launchbar.core.descriptorType.default\:F303\ Debug/activeLaunchTarget=org.eclipse.launchbar.core.launchTargetType.local\:Local
