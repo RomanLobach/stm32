@@ -71,8 +71,6 @@ TIM_HandleTypeDef htim14;
 UART_HandleTypeDef huart2;
 UART_HandleTypeDef huart3;
 
-PCD_HandleTypeDef hpcd_USB_OTG_FS;
-
 /* USER CODE BEGIN PV */
 
 /* USER CODE END PV */
@@ -86,7 +84,7 @@ static void MX_SPI1_Init(void);
 static void MX_TIM14_Init(void);
 static void MX_USART2_UART_Init(void);
 static void MX_USART3_UART_Init(void);
-static void MX_USB_OTG_FS_PCD_Init(void);
+static void MX_USB_OTG_FS_USB_Init(void);
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
@@ -94,7 +92,7 @@ static void MX_USB_OTG_FS_PCD_Init(void);
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
 int USER_MODE = 1;
-int WATCH_MODE = 1;
+char rx_buffer[20];
 
 int BTN_DEBOUNCE_TIMER = 20;
 
@@ -109,6 +107,12 @@ uint16_t BTN_BLUE_currentState;
 uint16_t BTN_BLUE_press_slowCount = 0;
 uint16_t BTN_BLUE_release_slowCount = 0;
 bool BTN_BLUE_isPressed = false;
+
+uint16_t BTN_SET_initState = GPIO_PIN_SET;
+uint16_t BTN_SET_currentState;
+uint16_t BTN_SET_press_slowCount = 0;
+uint16_t BTN_SET_release_slowCount = 0;
+bool BTN_SET_isPressed = false;
 /* USER CODE END 0 */
 
 /**
@@ -145,9 +149,10 @@ int main(void)
   MX_TIM14_Init();
   MX_USART2_UART_Init();
   MX_USART3_UART_Init();
-  MX_USB_OTG_FS_PCD_Init();
+  MX_USB_OTG_FS_USB_Init();
   /* USER CODE BEGIN 2 */
-
+  //init listening to UART
+  HAL_UART_Receive_IT(&huart2, (uint8_t*)rx_buffer, 1);
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -155,15 +160,17 @@ int main(void)
   setModeLed();
   while (1)
   {
+	  int delayTime = (6 - USER_MODE) * 100;
+
 	  HAL_GPIO_WritePin(GPIOB, LD1_G_Pin, GPIO_PIN_RESET);
 	  HAL_GPIO_WritePin(GPIOB, LD3_R_Pin, GPIO_PIN_SET);
-	  HAL_Delay(50);
+	  HAL_Delay(delayTime);
 	  HAL_GPIO_WritePin(GPIOB, LD3_R_Pin, GPIO_PIN_RESET);
 	  HAL_GPIO_WritePin(GPIOB, LD2_B_Pin, GPIO_PIN_SET);
-	  HAL_Delay(50);
+	  HAL_Delay(delayTime);
 	  HAL_GPIO_WritePin(GPIOB, LD2_B_Pin, GPIO_PIN_RESET);
 	  HAL_GPIO_WritePin(GPIOB, LD1_G_Pin, GPIO_PIN_SET);
-	  HAL_Delay(50);
+	  HAL_Delay(delayTime);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -336,11 +343,11 @@ static void MX_SPI1_Init(void)
   hspi1.Instance = SPI1;
   hspi1.Init.Mode = SPI_MODE_MASTER;
   hspi1.Init.Direction = SPI_DIRECTION_2LINES;
-  hspi1.Init.DataSize = SPI_DATASIZE_4BIT;
+  hspi1.Init.DataSize = SPI_DATASIZE_8BIT;
   hspi1.Init.CLKPolarity = SPI_POLARITY_LOW;
   hspi1.Init.CLKPhase = SPI_PHASE_1EDGE;
   hspi1.Init.NSS = SPI_NSS_HARD_OUTPUT;
-  hspi1.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_2;
+  hspi1.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_16;
   hspi1.Init.FirstBit = SPI_FIRSTBIT_MSB;
   hspi1.Init.TIMode = SPI_TIMODE_DISABLE;
   hspi1.Init.CRCCalculation = SPI_CRCCALCULATION_DISABLE;
@@ -409,7 +416,7 @@ static void MX_USART2_UART_Init(void)
   huart2.Init.StopBits = UART_STOPBITS_1;
   huart2.Init.Parity = UART_PARITY_NONE;
   huart2.Init.Mode = UART_MODE_TX_RX;
-  huart2.Init.HwFlowCtl = UART_HWCONTROL_RTS_CTS;
+  huart2.Init.HwFlowCtl = UART_HWCONTROL_NONE;
   huart2.Init.OverSampling = UART_OVERSAMPLING_16;
   huart2.Init.OneBitSampling = UART_ONE_BIT_SAMPLE_DISABLE;
   huart2.AdvancedInit.AdvFeatureInit = UART_ADVFEATURE_NO_INIT;
@@ -463,7 +470,7 @@ static void MX_USART3_UART_Init(void)
   * @param None
   * @retval None
   */
-static void MX_USB_OTG_FS_PCD_Init(void)
+static void MX_USB_OTG_FS_USB_Init(void)
 {
 
   /* USER CODE BEGIN USB_OTG_FS_Init 0 */
@@ -473,20 +480,6 @@ static void MX_USB_OTG_FS_PCD_Init(void)
   /* USER CODE BEGIN USB_OTG_FS_Init 1 */
 
   /* USER CODE END USB_OTG_FS_Init 1 */
-  hpcd_USB_OTG_FS.Instance = USB_OTG_FS;
-  hpcd_USB_OTG_FS.Init.dev_endpoints = 6;
-  hpcd_USB_OTG_FS.Init.speed = PCD_SPEED_FULL;
-  hpcd_USB_OTG_FS.Init.dma_enable = DISABLE;
-  hpcd_USB_OTG_FS.Init.phy_itface = PCD_PHY_EMBEDDED;
-  hpcd_USB_OTG_FS.Init.Sof_enable = ENABLE;
-  hpcd_USB_OTG_FS.Init.low_power_enable = DISABLE;
-  hpcd_USB_OTG_FS.Init.lpm_enable = DISABLE;
-  hpcd_USB_OTG_FS.Init.vbus_sensing_enable = ENABLE;
-  hpcd_USB_OTG_FS.Init.use_dedicated_ep1 = DISABLE;
-  if (HAL_PCD_Init(&hpcd_USB_OTG_FS) != HAL_OK)
-  {
-    Error_Handler();
-  }
   /* USER CODE BEGIN USB_OTG_FS_Init 2 */
 
   /* USER CODE END USB_OTG_FS_Init 2 */
@@ -564,6 +557,14 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(USB_OverCurrent_GPIO_Port, &GPIO_InitStruct);
 
+  /*Configure GPIO pins : PA10 PA11 PA12 */
+  GPIO_InitStruct.Pin = GPIO_PIN_10|GPIO_PIN_11|GPIO_PIN_12;
+  GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
+  GPIO_InitStruct.Alternate = GPIO_AF10_OTG_FS;
+  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+
 /* USER CODE BEGIN MX_GPIO_Init_2 */
 /* USER CODE END MX_GPIO_Init_2 */
 }
@@ -608,12 +609,21 @@ void setModeLed(void)
 	}
 }
 
+void UART_Transmit(void* data)
+{
+	char tx_buffer[20];
+	sprintf(tx_buffer, "%d", data);
+	HAL_UART_Transmit(&huart2, (uint8_t*)tx_buffer, strlen(tx_buffer), 0xFFFF);
+
+}
+
 void HAL_TIM_PeriodElapsedCallback (TIM_HandleTypeDef * htim)
 {
 
 	if(htim == &htim14)
 	{
 		BTN_RED_currentState = HAL_GPIO_ReadPin(GPIOG, BTN_R_Pin);
+		BTN_SET_currentState = HAL_GPIO_ReadPin(GPIOG, BTN_SET_Pin);
 		BTN_BLUE_currentState = HAL_GPIO_ReadPin(GPIOG, BTN_B_Pin);
 		//turning on RED btn
 		if(BTN_RED_currentState != BTN_RED_initState)
@@ -674,6 +684,28 @@ void HAL_TIM_PeriodElapsedCallback (TIM_HandleTypeDef * htim)
 			}
 
 		}
+		//turning on SET btn
+		if(BTN_SET_currentState != BTN_SET_initState)
+		{
+
+			++BTN_SET_press_slowCount;
+
+			if(BTN_SET_press_slowCount > BTN_DEBOUNCE_TIMER)
+			{
+				//if you are here than RED BTN is pressed
+				BTN_SET_press_slowCount = 0;
+
+				//onClick RED BTN code
+				if(BTN_SET_isPressed == false)
+				{
+
+					UART_Transmit(USER_MODE);
+
+					BTN_SET_isPressed = true;
+				}
+			}
+
+		}
 		//turning off RED btn
 		if(BTN_RED_currentState == BTN_RED_initState && BTN_RED_isPressed == true)
 		{
@@ -704,7 +736,35 @@ void HAL_TIM_PeriodElapsedCallback (TIM_HandleTypeDef * htim)
 
 			}
 		}
+		//turning off SET btn
+		if(BTN_SET_currentState == BTN_SET_initState && BTN_SET_isPressed == true)
+		{
+
+			++BTN_SET_release_slowCount;
+
+			if(BTN_SET_release_slowCount > BTN_DEBOUNCE_TIMER)
+			{
+
+				BTN_SET_isPressed = false;
+				BTN_SET_release_slowCount = 0;
+				//onRelease RED BTN code
+
+			}
+		}
 	}
+}
+
+void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
+{
+  if (huart->Instance == USART2)
+  {
+	//userCode
+    USER_MODE = atoi(rx_buffer);
+    setModeLed();
+
+    //init listening to UART
+    HAL_UART_Receive_IT(&huart2, (uint8_t*)rx_buffer, 1);
+  }
 }
 /* USER CODE END 4 */
 

@@ -47,7 +47,7 @@ static void MX_USART2_UART_Init(void);
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
 int USER_MODE = 1;
-int WATCH_MODE = 1;
+char rx_buffer[20];
 
 int BTN_DEBOUNCE_TIMER = 20;
 
@@ -62,6 +62,12 @@ uint16_t BTN_BLUE_currentState;
 uint16_t BTN_BLUE_press_slowCount = 0;
 uint16_t BTN_BLUE_release_slowCount = 0;
 bool BTN_BLUE_isPressed = false;
+
+uint16_t BTN_SET_initState = GPIO_PIN_SET;
+uint16_t BTN_SET_currentState;
+uint16_t BTN_SET_press_slowCount = 0;
+uint16_t BTN_SET_release_slowCount = 0;
+bool BTN_SET_isPressed = false;
 
 
 /* USER CODE END 0 */
@@ -87,6 +93,7 @@ int main(void)
   SystemClock_Config();
 
   /* USER CODE BEGIN SysInit */
+
   /* USER CODE END SysInit */
 
   /* Initialize all configured peripherals */
@@ -97,6 +104,8 @@ int main(void)
   MX_TIM17_Init();
   MX_USART2_UART_Init();
   /* USER CODE BEGIN 2 */
+  //init listening to UART
+  HAL_UART_Receive_IT(&huart2, (uint8_t*)rx_buffer, 1);
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -104,10 +113,12 @@ int main(void)
   setModeLed();
   while(1)
   {
+	  int delayTime = (6 - USER_MODE) * 100;
+
 	  HAL_GPIO_WritePin(GPIOB, LED_G_Pin, GPIO_PIN_SET);
-	  HAL_Delay(300);
+	  HAL_Delay(delayTime);
 	  HAL_GPIO_WritePin(GPIOB, LED_G_Pin, GPIO_PIN_RESET);
-	  HAL_Delay(300);
+	  HAL_Delay(delayTime);
 
     /* USER CODE END WHILE */
 
@@ -357,12 +368,12 @@ static void MX_USART2_UART_Init(void)
 
   /* USER CODE END USART2_Init 1 */
   huart2.Instance = USART2;
-  huart2.Init.BaudRate = 38400;
+  huart2.Init.BaudRate = 115200;
   huart2.Init.WordLength = UART_WORDLENGTH_8B;
   huart2.Init.StopBits = UART_STOPBITS_1;
   huart2.Init.Parity = UART_PARITY_NONE;
   huart2.Init.Mode = UART_MODE_TX_RX;
-  huart2.Init.HwFlowCtl = UART_HWCONTROL_RTS_CTS;
+  huart2.Init.HwFlowCtl = UART_HWCONTROL_NONE;
   huart2.Init.OverSampling = UART_OVERSAMPLING_16;
   huart2.Init.OneBitSampling = UART_ONE_BIT_SAMPLE_DISABLE;
   huart2.AdvancedInit.AdvFeatureInit = UART_ADVFEATURE_NO_INIT;
@@ -429,6 +440,8 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
+
+//INTERRUP PROCESSING
 void resetModeLed(void)
 {
 
@@ -473,12 +486,21 @@ void setModeLed(void)
 	}
 }
 
-void HAL_TIM_PeriodElapsedCallback (TIM_HandleTypeDef * htim)
+void UART_Transmit(void* data)
+{
+	char tx_buffer[20];
+	sprintf(tx_buffer, "%d", data);
+	HAL_UART_Transmit(&huart2, (uint8_t*)tx_buffer, strlen(tx_buffer), 0xFFFF);
+
+}
+
+void HAL_TIM_PeriodElapsedCallback (TIM_HandleTypeDef * htim)				//TIM16 interrupt processing
 {
 
 	if(htim == &htim16)
 	{
 		BTN_RED_currentState = HAL_GPIO_ReadPin(GPIOB, BTN_R_Pin);
+		BTN_SET_currentState = HAL_GPIO_ReadPin(GPIOA, BTN_SET_Pin);
 		BTN_BLUE_currentState = HAL_GPIO_ReadPin(GPIOA, BTN_B_Pin);
 		//turning on RED btn
 		if(BTN_RED_currentState != BTN_RED_initState)
@@ -539,6 +561,28 @@ void HAL_TIM_PeriodElapsedCallback (TIM_HandleTypeDef * htim)
 			}
 
 		}
+		//turning on SET btn
+		if(BTN_SET_currentState != BTN_SET_initState)
+		{
+
+			++BTN_SET_press_slowCount;
+
+			if(BTN_SET_press_slowCount > BTN_DEBOUNCE_TIMER)
+			{
+				//if you are here than RED BTN is pressed
+				BTN_SET_press_slowCount = 0;
+
+				//onClick RED BTN code
+				if(BTN_SET_isPressed == false)
+				{
+
+					UART_Transmit(USER_MODE);
+
+					BTN_SET_isPressed = true;
+				}
+			}
+
+		}
 		//turning off RED btn
 		if(BTN_RED_currentState == BTN_RED_initState && BTN_RED_isPressed == true)
 		{
@@ -569,9 +613,37 @@ void HAL_TIM_PeriodElapsedCallback (TIM_HandleTypeDef * htim)
 
 			}
 		}
+		//turning off SET btn
+		if(BTN_SET_currentState == BTN_SET_initState && BTN_SET_isPressed == true)
+		{
+
+			++BTN_SET_release_slowCount;
+
+			if(BTN_SET_release_slowCount > BTN_DEBOUNCE_TIMER)
+			{
+
+				BTN_SET_isPressed = false;
+				BTN_SET_release_slowCount = 0;
+				//onRelease RED BTN code
+
+			}
+		}
 	}
 }
 
+
+void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
+{
+  if (huart->Instance == USART2)
+  {
+	//userCode
+    USER_MODE = atoi(rx_buffer);
+    setModeLed();
+
+    //init listening to UART
+    HAL_UART_Receive_IT(&huart2, (uint8_t*)rx_buffer, 1);
+  }
+}
 /* USER CODE END 4 */
 
 /**

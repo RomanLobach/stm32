@@ -1,10 +1,10 @@
-15:48:09 **** Incremental Build of configuration Debug for project F303 ****
+21:12:17 **** Incremental Build of configuration Debug for project F303 ****
 make -j3 all 
 arm-none-eabi-size   F303.elf 
    text	   data	    bss	    dec	    hex	filename
-  18044	     32	   2056	  20132	   4ea4	F303.elf
+  28076	    116	   2420	  30612	   7794	F303.elf
 Finished building: default.size.stdout
  
 
-15:48:09 Build Finished. 0 errors, 0 warnings. (took 205ms)
+21:12:18 Build Finished. 0 errors, 0 warnings. (took 337ms)
 
