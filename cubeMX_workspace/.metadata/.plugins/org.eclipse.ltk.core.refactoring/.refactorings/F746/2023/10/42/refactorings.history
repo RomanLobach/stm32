@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename resource &apos;F746/projects/main.c&apos; to &apos;main_btn_debounce_with_tim14.c&apos;" description="Rename resource &apos;main.c&apos;" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="projects/main.c" name="main_btn_debounce_with_tim14.c" stamp="1697701603499" updateReferences="true"/>
+</session>

@@ -1,0 +1,3 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">&#x0A;<refactoring comment="Rename resource &apos;F746/Drivers/CMSIS/RTOS2&apos; to &apos;RTOS2_10&apos;" description="Rename resource &apos;RTOS2&apos;" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="Drivers/CMSIS/RTOS2" name="RTOS2_10" stamp="1697658043271" updateReferences="true"/>&#x0A;<refactoring comment="Rename resource &apos;F746/Drivers/CMSIS/RTOS2_10&apos; to &apos;RTOS2&apos;" description="Rename resource &apos;RTOS2_10&apos;" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="Drivers/CMSIS/RTOS2_10" name="RTOS2" stamp="1697658073575" updateReferences="true"/>
+</session>
