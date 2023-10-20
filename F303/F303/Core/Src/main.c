@@ -404,10 +404,20 @@ static void MX_GPIO_Init(void)
   __HAL_RCC_GPIOB_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(LED_ERR_GPIO_Port, LED_ERR_Pin, GPIO_PIN_RESET);
+
+  /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOB, LED_R_1_Pin|LED_R_2_Pin|LED_G_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOA, LED_R_3_Pin|LED_R_4_Pin|LED_R_5_Pin, GPIO_PIN_RESET);
+
+  /*Configure GPIO pin : LED_ERR_Pin */
+  GPIO_InitStruct.Pin = LED_ERR_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(LED_ERR_GPIO_Port, &GPIO_InitStruct);
 
   /*Configure GPIO pins : LED_R_1_Pin LED_R_2_Pin LED_G_Pin */
   GPIO_InitStruct.Pin = LED_R_1_Pin|LED_R_2_Pin|LED_G_Pin;
@@ -653,6 +663,13 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 void Error_Handler(void)
 {
   /* USER CODE BEGIN Error_Handler_Debug */
+  HAL_GPIO_WritePin(LED_ERR_GPIO_Port, LED_ERR_Pin, GPIO_PIN_SET);
+  /* User can add his own implementation to report the HAL error return state */
+  __disable_irq();
+  while (1)
+  {
+	  return;
+  }
   /* USER CODE END Error_Handler_Debug */
 }
 

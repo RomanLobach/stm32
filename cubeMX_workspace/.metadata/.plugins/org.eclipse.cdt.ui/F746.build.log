@@ -1,59 +1,10 @@
-21:12:56 **** Incremental Build of configuration Debug for project F746 ****
+15:44:22 **** Incremental Build of configuration Debug for project F746 ****
 make -j3 all 
-arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m7 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F746xx -c -I../Core/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
-../Core/Src/main.c: In function 'main':
-../Core/Src/main.c:160:3: warning: implicit declaration of function 'setModeLed' [-Wimplicit-function-declaration]
-  160 |   setModeLed();
-      |   ^~~~~~~~~~
-../Core/Src/main.c: At top level:
-../Core/Src/main.c:583:6: warning: conflicting types for 'setModeLed'; have 'void(void)'
-  583 | void setModeLed(void)
-      |      ^~~~~~~~~~
-../Core/Src/main.c:160:3: note: previous implicit declaration of 'setModeLed' with type 'void(void)'
-  160 |   setModeLed();
-      |   ^~~~~~~~~~
-../Core/Src/main.c: In function 'UART_Transmit':
-../Core/Src/main.c:615:9: warning: implicit declaration of function 'sprintf' [-Wimplicit-function-declaration]
-  615 |         sprintf(tx_buffer, "%d", data);
-      |         ^~~~~~~
-../Core/Src/main.c:26:1: note: include '<stdio.h>' or provide a declaration of 'sprintf'
-   25 | #include <stdbool.h>
-  +++ |+#include <stdio.h>
-   26 | /* USER CODE END Includes */
-../Core/Src/main.c:615:9: warning: incompatible implicit declaration of built-in function 'sprintf' [-Wbuiltin-declaration-mismatch]
-  615 |         sprintf(tx_buffer, "%d", data);
-      |         ^~~~~~~
-../Core/Src/main.c:615:9: note: include '<stdio.h>' or provide a declaration of 'sprintf'
-../Core/Src/main.c:615:30: warning: format '%d' expects argument of type 'int', but argument 3 has type 'void *' [-Wformat=]
-  615 |         sprintf(tx_buffer, "%d", data);
-      |                             ~^   ~~~~
-      |                              |   |
-      |                              int void *
-      |                             %p
-../Core/Src/main.c: In function 'HAL_TIM_PeriodElapsedCallback':
-../Core/Src/main.c:702:55: warning: passing argument 1 of 'UART_Transmit' makes pointer from integer without a cast [-Wint-conversion]
-  702 |                                         UART_Transmit(USER_MODE);
-      |                                                       ^~~~~~~~~
-      |                                                       |
-      |                                                       int
-../Core/Src/main.c:612:26: note: expected 'void *' but argument is of type 'int'
-  612 | void UART_Transmit(void* data)
-      |                    ~~~~~~^~~~
-../Core/Src/main.c: In function 'HAL_UART_RxCpltCallback':
-../Core/Src/main.c:762:17: warning: implicit declaration of function 'atoi' [-Wimplicit-function-declaration]
-  762 |     USER_MODE = atoi(rx_buffer);
-      |                 ^~~~
-arm-none-eabi-gcc -o "F746.elf" @"objects.list"   -mcpu=cortex-m7 -T"/Users/romanlobach/Documents/stm32/F746/STM32F746ZGTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="F746.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
-Finished building target: F746.elf
- 
 arm-none-eabi-size   F746.elf 
-arm-none-eabi-objdump -h -S  F746.elf  > "F746.list"
    text	   data	    bss	    dec	    hex	filename
-  28116	    436	   2716	  31268	   7a24	F746.elf
+  28140	    436	   2716	  31292	   7a3c	F746.elf
 Finished building: default.size.stdout
  
-Finished building: F746.list
- 
 
-21:12:57 Build Finished. 0 errors, 7 warnings. (took 1s.407ms)
+15:44:22 Build Finished. 0 errors, 0 warnings. (took 203ms)
 
