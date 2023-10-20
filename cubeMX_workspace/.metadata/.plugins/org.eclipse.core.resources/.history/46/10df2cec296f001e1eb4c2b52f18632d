@@ -1,0 +1,18 @@
+
+/* USER CODE BEGIN Includes */
+#include "stm32f3xx_hal.h" 	// usually it's already included in main.h
+/* USER CODE END Includes */
+
+UART_HandleTypeDef huart2; //using uart2
+
+/* USER CODE BEGIN PV */
+char rx_buffer[20];  //defining transfer buffer. this example is for 20 char long phrase
+/* USER CODE END PV */
+
+int main(void)
+{
+/* USER CODE BEGIN 2 */
+//init listening to UART in our main func
+HAL_UART_Receive_IT(&huart2, (uint8_t*)rx_buffer, 1);
+/* USER CODE END 2 */
+}

@@ -4930,3 +4930,16 @@ java.io.FileNotFoundException: /Users/romanlobach/Documents/stm32/F303/F303/Debu
 	at org.eclipse.debug.internal.ui.DebugUIPlugin.buildAndLaunch(DebugUIPlugin.java:1040)
 	at org.eclipse.debug.internal.ui.DebugUIPlugin$1.run(DebugUIPlugin.java:1243)
 	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+!SESSION 2023-10-20 11:46:57.024 -----------------------------------------------
+eclipse.buildId=Version 1.13.2
+java.version=17.0.6
+java.vendor=Eclipse Adoptium
+BootLoader constants: OS=macosx, ARCH=x86_64, WS=cocoa, NL=uk_UA
+Framework arguments:  -keyring /Users/romanlobach/.eclipse_keyring
+Command-line arguments:  -os macosx -ws cocoa -arch x86_64 -keyring /Users/romanlobach/.eclipse_keyring
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 1 1 2023-10-20 11:47:16.762
+!MESSAGE Log4j2 initialized with config file /Users/romanlobach/Documents/stm32/cubeMX_workspace/.metadata/.log4j2.xml
+
+!ENTRY com.st.stm32cube.ide.mcu.ide 1 1 2023-10-20 11:47:29.812
+!MESSAGE Started RMI Server, listening on port 41337

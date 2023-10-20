@@ -1,0 +1,8 @@
+
+/* USER CODE BEGIN PV */
+/* USER CODE END PV */
+uint16_t BTN_RED_initState = GPIO_PIN_SET;
+uint16_t BTN_RED_currentState;
+uint16_t BTN_RED_press_slowCount = 0;
+uint16_t BTN_RED_release_slowCount = 0;
+bool BTN_RED_isPressed = false;
