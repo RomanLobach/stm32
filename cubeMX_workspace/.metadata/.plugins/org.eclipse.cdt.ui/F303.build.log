@@ -1,4 +1,4 @@
-15:52:46 **** Incremental Build of configuration Debug for project F303 ****
+22:33:00 **** Incremental Build of configuration Debug for project F303 ****
 make -j3 all 
 arm-none-eabi-gcc "../Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F303x8 -c -I../Core/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F3xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal.d" -MT"Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal.o"
 arm-none-eabi-gcc "../Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_cortex.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F303x8 -c -I../Core/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F3xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_cortex.d" -MT"Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_cortex.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_cortex.o"
@@ -22,57 +22,57 @@ arm-none-eabi-gcc "../Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_uart_ex.c" 
 arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F303x8 -c -I../Core/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F3xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
 arm-none-eabi-gcc "../Core/Src/stm32f3xx_hal_msp.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F303x8 -c -I../Core/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F3xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/stm32f3xx_hal_msp.d" -MT"Core/Src/stm32f3xx_hal_msp.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/stm32f3xx_hal_msp.o"
 ../Core/Src/main.c: In function 'main':
-../Core/Src/main.c:113:3: warning: implicit declaration of function 'setModeLed' [-Wimplicit-function-declaration]
-  113 |   setModeLed();
+../Core/Src/main.c:111:3: warning: implicit declaration of function 'setModeLed' [-Wimplicit-function-declaration]
+  111 |   setModeLed();
       |   ^~~~~~~~~~
 ../Core/Src/main.c: At top level:
-../Core/Src/main.c:470:6: warning: conflicting types for 'setModeLed'; have 'void(void)'
-  470 | void setModeLed(void)
+../Core/Src/main.c:468:6: warning: conflicting types for 'setModeLed'; have 'void(void)'
+  468 | void setModeLed(void)
       |      ^~~~~~~~~~
-../Core/Src/main.c:113:3: note: previous implicit declaration of 'setModeLed' with type 'void(void)'
-  113 |   setModeLed();
+../Core/Src/main.c:111:3: note: previous implicit declaration of 'setModeLed' with type 'void(void)'
+  111 |   setModeLed();
       |   ^~~~~~~~~~
 ../Core/Src/main.c: In function 'UART_Transmit':
-../Core/Src/main.c:502:9: warning: implicit declaration of function 'sprintf' [-Wimplicit-function-declaration]
-  502 |         sprintf(tx_buffer, "%d", data);
+../Core/Src/main.c:500:9: warning: implicit declaration of function 'sprintf' [-Wimplicit-function-declaration]
+  500 |         sprintf(tx_buffer, "%d", data);
       |         ^~~~~~~
 ../Core/Src/main.c:9:1: note: include '<stdio.h>' or provide a declaration of 'sprintf'
     8 | #include <stdbool.h>
   +++ |+#include <stdio.h>
     9 | /* USER CODE END Includes */
-../Core/Src/main.c:502:9: warning: incompatible implicit declaration of built-in function 'sprintf' [-Wbuiltin-declaration-mismatch]
-  502 |         sprintf(tx_buffer, "%d", data);
+../Core/Src/main.c:500:9: warning: incompatible implicit declaration of built-in function 'sprintf' [-Wbuiltin-declaration-mismatch]
+  500 |         sprintf(tx_buffer, "%d", data);
       |         ^~~~~~~
-../Core/Src/main.c:502:9: note: include '<stdio.h>' or provide a declaration of 'sprintf'
-../Core/Src/main.c:502:30: warning: format '%d' expects argument of type 'int', but argument 3 has type 'void *' [-Wformat=]
-  502 |         sprintf(tx_buffer, "%d", data);
+../Core/Src/main.c:500:9: note: include '<stdio.h>' or provide a declaration of 'sprintf'
+../Core/Src/main.c:500:30: warning: format '%d' expects argument of type 'int', but argument 3 has type 'void *' [-Wformat=]
+  500 |         sprintf(tx_buffer, "%d", data);
       |                             ~^   ~~~~
       |                              |   |
       |                              int void *
       |                             %p
-../Core/Src/main.c:503:57: warning: implicit declaration of function 'strlen' [-Wimplicit-function-declaration]
-  503 |         HAL_UART_Transmit(&huart2, (uint8_t*)tx_buffer, strlen(tx_buffer), 0xFFFF);
+../Core/Src/main.c:501:57: warning: implicit declaration of function 'strlen' [-Wimplicit-function-declaration]
+  501 |         HAL_UART_Transmit(&huart2, (uint8_t*)tx_buffer, strlen(tx_buffer), 0xFFFF);
       |                                                         ^~~~~~
 ../Core/Src/main.c:9:1: note: include '<string.h>' or provide a declaration of 'strlen'
     8 | #include <stdbool.h>
   +++ |+#include <string.h>
     9 | /* USER CODE END Includes */
-../Core/Src/main.c:503:57: warning: incompatible implicit declaration of built-in function 'strlen' [-Wbuiltin-declaration-mismatch]
-  503 |         HAL_UART_Transmit(&huart2, (uint8_t*)tx_buffer, strlen(tx_buffer), 0xFFFF);
+../Core/Src/main.c:501:57: warning: incompatible implicit declaration of built-in function 'strlen' [-Wbuiltin-declaration-mismatch]
+  501 |         HAL_UART_Transmit(&huart2, (uint8_t*)tx_buffer, strlen(tx_buffer), 0xFFFF);
       |                                                         ^~~~~~
-../Core/Src/main.c:503:57: note: include '<string.h>' or provide a declaration of 'strlen'
+../Core/Src/main.c:501:57: note: include '<string.h>' or provide a declaration of 'strlen'
 ../Core/Src/main.c: In function 'HAL_TIM_PeriodElapsedCallback':
-../Core/Src/main.c:589:55: warning: passing argument 1 of 'UART_Transmit' makes pointer from integer without a cast [-Wint-conversion]
-  589 |                                         UART_Transmit(USER_MODE);
+../Core/Src/main.c:587:55: warning: passing argument 1 of 'UART_Transmit' makes pointer from integer without a cast [-Wint-conversion]
+  587 |                                         UART_Transmit(USER_MODE);
       |                                                       ^~~~~~~~~
       |                                                       |
       |                                                       int
-../Core/Src/main.c:499:26: note: expected 'void *' but argument is of type 'int'
-  499 | void UART_Transmit(void* data)
+../Core/Src/main.c:497:26: note: expected 'void *' but argument is of type 'int'
+  497 | void UART_Transmit(void* data)
       |                    ~~~~~~^~~~
 ../Core/Src/main.c: In function 'HAL_UART_RxCpltCallback':
-../Core/Src/main.c:650:17: warning: implicit declaration of function 'atoi' [-Wimplicit-function-declaration]
-  650 |     USER_MODE = atoi(rx_buffer);
+../Core/Src/main.c:648:17: warning: implicit declaration of function 'atoi' [-Wimplicit-function-declaration]
+  648 |     USER_MODE = atoi(rx_buffer);
       |                 ^~~~
 arm-none-eabi-gcc "../Core/Src/stm32f3xx_it.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F303x8 -c -I../Core/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F3xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/stm32f3xx_it.d" -MT"Core/Src/stm32f3xx_it.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/stm32f3xx_it.o"
 arm-none-eabi-gcc "../Core/Src/system_stm32f3xx.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F303x8 -c -I../Core/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F3xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/system_stm32f3xx.d" -MT"Core/Src/system_stm32f3xx.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/system_stm32f3xx.o"
@@ -82,11 +82,11 @@ Finished building target: F303.elf
 arm-none-eabi-size   F303.elf 
 arm-none-eabi-objdump -h -S  F303.elf  > "F303.list"
    text	   data	    bss	    dec	    hex	filename
-  28128	    116	   2420	  30664	   77c8	F303.elf
+  30748	    116	   2420	  33284	   8204	F303.elf
 Finished building: default.size.stdout
  
 Finished building: F303.list
  
 
-15:52:50 Build Finished. 0 errors, 9 warnings. (took 4s.121ms)
+22:33:05 Build Finished. 0 errors, 9 warnings. (took 4s.858ms)
 

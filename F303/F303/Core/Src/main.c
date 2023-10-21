@@ -104,8 +104,6 @@ int main(void)
   MX_TIM17_Init();
   MX_USART2_UART_Init();
   /* USER CODE BEGIN 2 */
-  //init listening to UART
-  HAL_UART_Receive_IT(&huart2, (uint8_t*)rx_buffer, 1);
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -187,7 +185,7 @@ static void MX_I2C1_Init(void)
   /* USER CODE END I2C1_Init 1 */
   hi2c1.Instance = I2C1;
   hi2c1.Init.Timing = 0x2000090E;
-  hi2c1.Init.OwnAddress1 = 0;
+  hi2c1.Init.OwnAddress1 = 36;
   hi2c1.Init.AddressingMode = I2C_ADDRESSINGMODE_7BIT;
   hi2c1.Init.DualAddressMode = I2C_DUALADDRESS_DISABLE;
   hi2c1.Init.OwnAddress2 = 0;
@@ -240,7 +238,7 @@ static void MX_SPI1_Init(void)
   hspi1.Init.DataSize = SPI_DATASIZE_8BIT;
   hspi1.Init.CLKPolarity = SPI_POLARITY_LOW;
   hspi1.Init.CLKPhase = SPI_PHASE_1EDGE;
-  hspi1.Init.NSS = SPI_NSS_HARD_INPUT;
+  hspi1.Init.NSS = SPI_NSS_SOFT;
   hspi1.Init.FirstBit = SPI_FIRSTBIT_MSB;
   hspi1.Init.TIMode = SPI_TIMODE_DISABLE;
   hspi1.Init.CRCCalculation = SPI_CRCCALCULATION_DISABLE;
@@ -252,7 +250,7 @@ static void MX_SPI1_Init(void)
     Error_Handler();
   }
   /* USER CODE BEGIN SPI1_Init 2 */
-
+  HAL_SPI_Receive_IT(&hspi1, (uint8_t*)rx_buffer, 1);
   /* USER CODE END SPI1_Init 2 */
 
 }
@@ -382,7 +380,7 @@ static void MX_USART2_UART_Init(void)
     Error_Handler();
   }
   /* USER CODE BEGIN USART2_Init 2 */
-
+  HAL_UART_Receive_IT(&huart2, (uint8_t*)rx_buffer, 1);
   /* USER CODE END USART2_Init 2 */
 
 }
@@ -653,6 +651,20 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
     //init listening to UART
     HAL_UART_Receive_IT(&huart2, (uint8_t*)rx_buffer, 1);
   }
+}
+
+void HAL_SPI_RxCpltCallback(SPI_HandleTypeDef *hspi) {
+    // Handle received data
+    // You can access the received data from the 'receivedData' variable
+	if (hspi->Instance == SPI1 && atoi(rx_buffer))
+	  {
+		//userCode
+	    USER_MODE = atoi(rx_buffer);
+	    setModeLed();
+
+	    HAL_SPI_Receive_IT(&hspi1, (uint8_t*)rx_buffer, 1);
+	  }
+
 }
 /* USER CODE END 4 */
 

@@ -22,7 +22,10 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+
 #include <stdbool.h>
+#include <stdio.h>
+
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -92,6 +95,7 @@ static void MX_USB_OTG_FS_USB_Init(void);
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
 int USER_MODE = 1;
+int PROTOCOL = 1;
 char rx_buffer[20];
 
 int BTN_DEBOUNCE_TIMER = 20;
@@ -113,6 +117,12 @@ uint16_t BTN_SET_currentState;
 uint16_t BTN_SET_press_slowCount = 0;
 uint16_t BTN_SET_release_slowCount = 0;
 bool BTN_SET_isPressed = false;
+
+uint16_t BTN_PROTOCOL_initState = GPIO_PIN_SET;
+uint16_t BTN_PROTOCOL_currentState;
+uint16_t BTN_PROTOCOL_press_slowCount = 0;
+uint16_t BTN_PROTOCOL_release_slowCount = 0;
+bool BTN_PROTOCOL_isPressed = false;
 /* USER CODE END 0 */
 
 /**
@@ -122,7 +132,7 @@ bool BTN_SET_isPressed = false;
 int main(void)
 {
   /* USER CODE BEGIN 1 */
-
+  ;
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -151,33 +161,24 @@ int main(void)
   MX_USART3_UART_Init();
   MX_USB_OTG_FS_USB_Init();
   /* USER CODE BEGIN 2 */
-
-  /*
-   *
-   * UART
-   *
-   */
-
-  //init listening to UART
-  HAL_UART_Receive_IT(&huart2, (uint8_t*)rx_buffer, 1);
-
-  /*
-   *
-   * SPI
-   *
-   */
-
-
+//
 
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
+
   setModeLed();
+  setProtocolLed();
+
+
   while (1)
   {
 	  int delayTime = (6 - USER_MODE) * 100;
 
+    /* USER CODE END WHILE */
+
+    /* USER CODE BEGIN 3 */
 	  HAL_GPIO_WritePin(GPIOB, LD1_G_Pin, GPIO_PIN_RESET);
 	  HAL_GPIO_WritePin(GPIOB, LD3_R_Pin, GPIO_PIN_SET);
 	  HAL_Delay(delayTime);
@@ -187,9 +188,9 @@ int main(void)
 	  HAL_GPIO_WritePin(GPIOB, LD2_B_Pin, GPIO_PIN_RESET);
 	  HAL_GPIO_WritePin(GPIOB, LD1_G_Pin, GPIO_PIN_SET);
 	  HAL_Delay(delayTime);
-    /* USER CODE END WHILE */
 
-    /* USER CODE BEGIN 3 */
+
+
   }
   /* USER CODE END 3 */
 }
@@ -309,7 +310,7 @@ static void MX_I2C1_Init(void)
   /* USER CODE END I2C1_Init 1 */
   hi2c1.Instance = I2C1;
   hi2c1.Init.Timing = 0x00808CD2;
-  hi2c1.Init.OwnAddress1 = 0;
+  hi2c1.Init.OwnAddress1 = 34;
   hi2c1.Init.AddressingMode = I2C_ADDRESSINGMODE_7BIT;
   hi2c1.Init.DualAddressMode = I2C_DUALADDRESS_DISABLE;
   hi2c1.Init.OwnAddress2 = 0;
@@ -362,7 +363,7 @@ static void MX_SPI1_Init(void)
   hspi1.Init.DataSize = SPI_DATASIZE_8BIT;
   hspi1.Init.CLKPolarity = SPI_POLARITY_LOW;
   hspi1.Init.CLKPhase = SPI_PHASE_1EDGE;
-  hspi1.Init.NSS = SPI_NSS_HARD_OUTPUT;
+  hspi1.Init.NSS = SPI_NSS_SOFT;
   hspi1.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_16;
   hspi1.Init.FirstBit = SPI_FIRSTBIT_MSB;
   hspi1.Init.TIMode = SPI_TIMODE_DISABLE;
@@ -375,7 +376,7 @@ static void MX_SPI1_Init(void)
     Error_Handler();
   }
   /* USER CODE BEGIN SPI1_Init 2 */
-  HAL_GPIO_WritePin(SPI1_SCK_GPIO_Port, SPI1_SCK_Pin, GPIO_PIN_SET);
+  HAL_SPI_Receive_IT(&hspi1, (uint8_t*)rx_buffer, 1);
   /* USER CODE END SPI1_Init 2 */
 
 }
@@ -476,7 +477,7 @@ static void MX_USART3_UART_Init(void)
     Error_Handler();
   }
   /* USER CODE BEGIN USART3_Init 2 */
-
+  HAL_UART_Receive_IT(&huart2, (uint8_t*)rx_buffer, 1);
   /* USER CODE END USART3_Init 2 */
 
 }
@@ -524,7 +525,7 @@ static void MX_GPIO_Init(void)
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOE, LED_R_1_Pin|LED_R_5_Pin|LED_R_2_Pin|LED_R_3_Pin
-                          |LED_R_4_Pin, GPIO_PIN_RESET);
+                          |LED_R_4_Pin|LED_UART_Pin|LED_SPI_Pin|LED_I2C_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOB, LD1_G_Pin|LD3_R_Pin|LD2_B_Pin, GPIO_PIN_RESET);
@@ -533,9 +534,9 @@ static void MX_GPIO_Init(void)
   HAL_GPIO_WritePin(GPIOG, LED_ERR_Pin|USB_PowerSwitchOn_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pins : LED_R_1_Pin LED_R_5_Pin LED_R_2_Pin LED_R_3_Pin
-                           LED_R_4_Pin */
+                           LED_R_4_Pin LED_UART_Pin LED_SPI_Pin LED_I2C_Pin */
   GPIO_InitStruct.Pin = LED_R_1_Pin|LED_R_5_Pin|LED_R_2_Pin|LED_R_3_Pin
-                          |LED_R_4_Pin;
+                          |LED_R_4_Pin|LED_UART_Pin|LED_SPI_Pin|LED_I2C_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
@@ -554,8 +555,8 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : BTN_B_Pin BTN_R_Pin BTN_SET_Pin */
-  GPIO_InitStruct.Pin = BTN_B_Pin|BTN_R_Pin|BTN_SET_Pin;
+  /*Configure GPIO pins : BTN_B_Pin BTN_R_Pin BTN_SET_Pin BTN_PROTOCOL_Pin */
+  GPIO_InitStruct.Pin = BTN_B_Pin|BTN_R_Pin|BTN_SET_Pin|BTN_PROTOCOL_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
   GPIO_InitStruct.Pull = GPIO_PULLUP;
   HAL_GPIO_Init(GPIOG, &GPIO_InitStruct);
@@ -598,30 +599,51 @@ void resetModeLed(void)
 
 void setModeLed(void)
 {
+	resetModeLed();
+
 	if(USER_MODE == 1)
 	{
-	  resetModeLed();
-	  HAL_GPIO_WritePin(GPIOE, LED_R_1_Pin, GPIO_PIN_SET);
+		HAL_GPIO_WritePin(GPIOE, LED_R_1_Pin, GPIO_PIN_SET);
 	}
 	if(USER_MODE == 2)
 	{
-	  resetModeLed();
-	  HAL_GPIO_WritePin(GPIOE, LED_R_2_Pin, GPIO_PIN_SET);
+		HAL_GPIO_WritePin(GPIOE, LED_R_2_Pin, GPIO_PIN_SET);
 	}
 	if(USER_MODE == 3)
 	{
-	  resetModeLed();
-	  HAL_GPIO_WritePin(GPIOE, LED_R_3_Pin, GPIO_PIN_SET);
+		HAL_GPIO_WritePin(GPIOE, LED_R_3_Pin, GPIO_PIN_SET);
 	}
 	if(USER_MODE == 4)
 	{
-	  resetModeLed();
-	  HAL_GPIO_WritePin(GPIOE, LED_R_4_Pin, GPIO_PIN_SET);
+		HAL_GPIO_WritePin(GPIOE, LED_R_4_Pin, GPIO_PIN_SET);
 	}
 	if(USER_MODE == 5)
 	{
-	  resetModeLed();
-	  HAL_GPIO_WritePin(GPIOE, LED_R_5_Pin, GPIO_PIN_SET);
+		HAL_GPIO_WritePin(GPIOE, LED_R_5_Pin, GPIO_PIN_SET);
+	}
+}
+
+void resetProtocolLed(void)
+{
+
+	HAL_GPIO_WritePin(GPIOE, LED_UART_Pin|LED_SPI_Pin|LED_I2C_Pin, GPIO_PIN_RESET);
+
+}
+
+void setProtocolLed(void)
+{
+	resetProtocolLed();
+	if(PROTOCOL == 1)
+	{
+		HAL_GPIO_WritePin(GPIOE, LED_UART_Pin, GPIO_PIN_SET);
+	}
+	if(PROTOCOL == 2)
+	{
+		HAL_GPIO_WritePin(GPIOE, LED_SPI_Pin, GPIO_PIN_SET);
+	}
+	if(PROTOCOL == 3)
+	{
+		HAL_GPIO_WritePin(GPIOE, LED_I2C_Pin, GPIO_PIN_SET);
 	}
 }
 
@@ -633,6 +655,13 @@ void UART_Transmit(void* data)
 
 }
 
+void SPI_Transmit(void* data)
+{
+  char tx_buffer[20];
+  sprintf(tx_buffer, "%d", data);
+  HAL_SPI_Transmit(&hspi1, (uint8_t*)tx_buffer, strlen(tx_buffer), 0xFFFF);
+}
+
 void HAL_TIM_PeriodElapsedCallback (TIM_HandleTypeDef * htim)
 {
 
@@ -641,6 +670,7 @@ void HAL_TIM_PeriodElapsedCallback (TIM_HandleTypeDef * htim)
 		BTN_RED_currentState = HAL_GPIO_ReadPin(GPIOG, BTN_R_Pin);
 		BTN_SET_currentState = HAL_GPIO_ReadPin(GPIOG, BTN_SET_Pin);
 		BTN_BLUE_currentState = HAL_GPIO_ReadPin(GPIOG, BTN_B_Pin);
+		BTN_PROTOCOL_currentState = HAL_GPIO_ReadPin(GPIOG, BTN_PROTOCOL_Pin);
 		//turning on RED btn
 		if(BTN_RED_currentState != BTN_RED_initState)
 		{
@@ -715,9 +745,51 @@ void HAL_TIM_PeriodElapsedCallback (TIM_HandleTypeDef * htim)
 				if(BTN_SET_isPressed == false)
 				{
 
-					UART_Transmit(USER_MODE);
+					if(PROTOCOL == 1)
+					{
+						UART_Transmit(USER_MODE);
+					}
+					if(PROTOCOL == 2)
+					{
+						SPI_Transmit(USER_MODE);
+					}
+					if(PROTOCOL == 3)
+					{
+
+					}
 
 					BTN_SET_isPressed = true;
+				}
+			}
+
+		}
+		//turning on PROTOCOL btn
+		if(BTN_PROTOCOL_currentState != BTN_PROTOCOL_initState)
+		{
+
+			++BTN_PROTOCOL_press_slowCount;
+
+			if(BTN_PROTOCOL_press_slowCount > BTN_DEBOUNCE_TIMER)
+			{
+				//if you are here than RED BTN is pressed
+				BTN_PROTOCOL_press_slowCount = 0;
+
+				//onClick RED BTN code
+				if(BTN_PROTOCOL_isPressed == false)
+				{
+
+					PROTOCOL = PROTOCOL + 1;
+
+					if(PROTOCOL == 4)
+					{
+
+						PROTOCOL = 1;
+
+					}
+
+					setProtocolLed();
+
+					BTN_PROTOCOL_isPressed = true;
 				}
 			}
 
@@ -767,20 +839,50 @@ void HAL_TIM_PeriodElapsedCallback (TIM_HandleTypeDef * htim)
 
 			}
 		}
+
+		//turning off PROTOCOL btn
+		if(BTN_PROTOCOL_currentState == BTN_PROTOCOL_initState && BTN_PROTOCOL_isPressed == true)
+		{
+
+			++BTN_PROTOCOL_release_slowCount;
+
+			if(BTN_PROTOCOL_release_slowCount > BTN_DEBOUNCE_TIMER)
+			{
+
+				BTN_PROTOCOL_isPressed = false;
+				BTN_PROTOCOL_release_slowCount = 0;
+				//onRelease RED BTN code
+
+			}
+		}
 	}
 }
 
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 {
-  if (huart->Instance == USART2)
-  {
-	//userCode
-    USER_MODE = atoi(rx_buffer);
-    setModeLed();
+	if (huart->Instance == USART2)
+	{
+		//userCode
+		USER_MODE = atoi(rx_buffer);
+		setModeLed();
 
-    //init listening to UART
-    HAL_UART_Receive_IT(&huart2, (uint8_t*)rx_buffer, 1);
-  }
+		//init listening to UART
+		HAL_UART_Receive_IT(&huart2, (uint8_t*)rx_buffer, 1);
+	}
+}
+
+void HAL_SPI_RxCpltCallback(SPI_HandleTypeDef *hspi) {
+    // Handle received data
+    // You can access the received data from the 'receivedData' variable
+	if (hspi->Instance == SPI1 && atoi(rx_buffer))
+	{
+	//userCode
+		USER_MODE = atoi(rx_buffer);
+		setModeLed();
+
+		HAL_SPI_Receive_IT(&hspi1, (uint8_t*)rx_buffer, 1);
+	}
+
 }
 /* USER CODE END 4 */
 
