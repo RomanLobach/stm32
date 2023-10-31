@@ -1,14 +1,84 @@
-22:48:34 **** Incremental Build of configuration Debug for project F303_reg ****
+21:21:17 **** Incremental Build of configuration Debug for project F303_reg ****
 make -j3 all 
 arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F303x8 -c -I../Core/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F3xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c: In function 'RAL_pinRegister':
+../Core/Src/main.c:337:35: warning: passing argument 1 of 'setBitHandler' makes pointer from integer without a cast [-Wint-conversion]
+  337 |                 setBitHandler(GPIO->MODER, mode, 0b11U, pinNumber * 2);
+      |                               ~~~~^~~~~~~
+      |                                   |
+      |                                   uint32_t {aka long unsigned int}
+../Core/Src/main.c:289:39: note: expected 'volatile uint32_t *' {aka 'volatile long unsigned int *'} but argument is of type 'uint32_t' {aka 'long unsigned int'}
+  289 | void setBitHandler(volatile uint32_t* reg, uint32_t setBit, uint32_t width, int position) {
+      |                    ~~~~~~~~~~~~~~~~~~~^~~
+../Core/Src/main.c:339:35: warning: passing argument 1 of 'setBitHandler' makes pointer from integer without a cast [-Wint-conversion]
+  339 |                 setBitHandler(GPIO->OTYPER, type, 0b1U, pinNumber);
+      |                               ~~~~^~~~~~~~
+      |                                   |
+      |                                   uint32_t {aka long unsigned int}
+../Core/Src/main.c:289:39: note: expected 'volatile uint32_t *' {aka 'volatile long unsigned int *'} but argument is of type 'uint32_t' {aka 'long unsigned int'}
+  289 | void setBitHandler(volatile uint32_t* reg, uint32_t setBit, uint32_t width, int position) {
+      |                    ~~~~~~~~~~~~~~~~~~~^~~
+../Core/Src/main.c:341:35: warning: passing argument 1 of 'setBitHandler' makes pointer from integer without a cast [-Wint-conversion]
+  341 |                 setBitHandler(GPIO->OSPEEDR, speed, 0b11U, pinNumber * 2);
+      |                               ~~~~^~~~~~~~~
+      |                                   |
+      |                                   uint32_t {aka long unsigned int}
+../Core/Src/main.c:289:39: note: expected 'volatile uint32_t *' {aka 'volatile long unsigned int *'} but argument is of type 'uint32_t' {aka 'long unsigned int'}
+  289 | void setBitHandler(volatile uint32_t* reg, uint32_t setBit, uint32_t width, int position) {
+      |                    ~~~~~~~~~~~~~~~~~~~^~~
+../Core/Src/main.c:343:35: warning: passing argument 1 of 'setBitHandler' makes pointer from integer without a cast [-Wint-conversion]
+  343 |                 setBitHandler(GPIO->PUPDR, pullResistor, 0b11U, pinNumber * 2);
+      |                               ~~~~^~~~~~~
+      |                                   |
+      |                                   uint32_t {aka long unsigned int}
+../Core/Src/main.c:289:39: note: expected 'volatile uint32_t *' {aka 'volatile long unsigned int *'} but argument is of type 'uint32_t' {aka 'long unsigned int'}
+  289 | void setBitHandler(volatile uint32_t* reg, uint32_t setBit, uint32_t width, int position) {
+      |                    ~~~~~~~~~~~~~~~~~~~^~~
+../Core/Src/main.c:345:35: warning: passing argument 1 of 'setBitHandler' makes pointer from integer without a cast [-Wint-conversion]
+  345 |                 setBitHandler(GPIO->MODER, mode, 0b11U, pinNumber * 2);
+      |                               ~~~~^~~~~~~
+      |                                   |
+      |                                   uint32_t {aka long unsigned int}
+../Core/Src/main.c:289:39: note: expected 'volatile uint32_t *' {aka 'volatile long unsigned int *'} but argument is of type 'uint32_t' {aka 'long unsigned int'}
+  289 | void setBitHandler(volatile uint32_t* reg, uint32_t setBit, uint32_t width, int position) {
+      |                    ~~~~~~~~~~~~~~~~~~~^~~
+../Core/Src/main.c:346:35: warning: passing argument 1 of 'setBitHandler' makes pointer from integer without a cast [-Wint-conversion]
+  346 |                 setBitHandler(GPIO->PUPDR, pullResistor, 0b11U, pinNumber * 2);
+      |                               ~~~~^~~~~~~
+      |                                   |
+      |                                   uint32_t {aka long unsigned int}
+../Core/Src/main.c:289:39: note: expected 'volatile uint32_t *' {aka 'volatile long unsigned int *'} but argument is of type 'uint32_t' {aka 'long unsigned int'}
+  289 | void setBitHandler(volatile uint32_t* reg, uint32_t setBit, uint32_t width, int position) {
+      |                    ~~~~~~~~~~~~~~~~~~~^~~
 arm-none-eabi-gcc -o "F303_reg.elf" @"objects.list"   -mcpu=cortex-m4 -T"/Users/romanlobach/Documents/stm32/F303_reg/STM32F303K8TX_FLASH.ld" --specs=nosys.specs -Wl,-Map="F303_reg.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 Finished building target: F303_reg.elf
  
 arm-none-eabi-size   F303_reg.elf 
 arm-none-eabi-objdump -h -S  F303_reg.elf  > "F303_reg.list"
    text	   data	    bss	    dec	    hex	filename
-   7936	     20	   1572	   9528	   2538	F303_reg.elf
+   7940	     20	   1572	   9532	   253c	F303_reg.elf
 Finished building: default.size.stdout
  
 Finished building: F303_reg.list
+ 
+21:22:28 **** Incremental Build of configuration Debug for project F303_reg ****
+make -j3 all 
+arm-none-eabi-size   F303_reg.elf 
+   text	   data	    bss	    dec	    hex	filename
+   7940	     20	   1572	   9532	   253c	F303_reg.elf
+Finished building: default.size.stdout
+ 
+21:22:41 **** Incremental Build of configuration Debug for project F303_reg ****
+make -j3 all 
+arm-none-eabi-size   F303_reg.elf 
+   text	   data	    bss	    dec	    hex	filename
+   7940	     20	   1572	   9532	   253c	F303_reg.elf
+Finished building: default.size.stdout
+ 
+21:25:57 **** Incremental Build of configuration Debug for project F303_reg ****
+make -j3 all 
+arm-none-eabi-size   F303_reg.elf 
+   text	   data	    bss	    dec	    hex	filename
+   7940	     20	   1572	   9532	   253c	F303_reg.elf
+Finished building: default.size.stdout
  
