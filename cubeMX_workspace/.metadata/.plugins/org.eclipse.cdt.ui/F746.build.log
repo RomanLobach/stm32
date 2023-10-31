@@ -1,10 +1,10 @@
-22:30:48 **** Incremental Build of configuration Debug for project F746 ****
+22:37:23 **** Incremental Build of configuration Debug for project F746 ****
 make -j3 all 
 arm-none-eabi-size   F746.elf 
    text	   data	    bss	    dec	    hex	filename
-  31972	    440	   2728	  35140	   8944	F746.elf
+  28944	    352	   2376	  31672	   7bb8	F746.elf
 Finished building: default.size.stdout
  
 
-22:30:49 Build Finished. 0 errors, 0 warnings. (took 285ms)
+22:37:23 Build Finished. 0 errors, 0 warnings. (took 204ms)
 
