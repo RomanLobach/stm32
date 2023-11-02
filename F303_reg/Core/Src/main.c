@@ -63,11 +63,7 @@ typedef enum {
 	PIN_HI  = 1
 } RAL_PinLevel;
 
-//typedef RAL_Status configurePin(PinConfig *pin);
-//typedef RAL_PinLevel readPin(PinConfig *pin);
-//typedef RAL_Status writePin(PinConfig *pin, RAL_PinLevel level);
-
-struct PinConfig {
+struct PinConfig{
 	GPIO_TypeDef* port;
     int pin_number;
     RAL_PinMode mode;
@@ -100,8 +96,6 @@ struct PinConfig {
 
 /* USER CODE BEGIN PV */
 
-char errorMessage[128] = 'no errors, bro';
-
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -111,7 +105,17 @@ static void MX_GPIO_Init(void);
 
 RAL_PinLevel RAL_readPin(PinConfig *pin);
 RAL_Status RAL_writePin(PinConfig *pin, RAL_PinLevel level);
-RAL_Status RAL_pinRegister(PinConfig *pin);
+RAL_Status RAL_pinConfig(PinConfig *pin);
+RAL_Status RAL_pinRegister(
+							PinConfig *pin,
+							GPIO_TypeDef* port,
+							int pin_number,
+							RAL_PinMode initMode,
+							RAL_PinOutputType initType,
+							RAL_PinOutputSpeed initSpeed,
+							RAL_PinPullUpPullDownResistor initResistor,
+							RAL_PinLevel initLevel
+							);
 
 /* USER CODE END PFP */
 
@@ -136,31 +140,6 @@ int main(void)
   HAL_Init();
 
   /* USER CODE BEGIN Init */
-//  if(RAL_pinRegister(GPIOB, 3, OUTPUT, PUSH_PULL, LOW, NO_PUPD) != RAL_OK) Error_Handler();
-//  if(RAL_pinRegister(GPIOA, 0, OUTPUT, PUSH_PULL, LOW, NO_PUPD) != RAL_OK) Error_Handler();
-//  if(RAL_pinRegister(GPIOA, 1, OUTPUT, PUSH_PULL, LOW, NO_PUPD) != RAL_OK) Error_Handler();
-//  if(RAL_pinRegister(GPIOA, 3, OUTPUT, PUSH_PULL, LOW, NO_PUPD) != RAL_OK) Error_Handler();
-//
-//  if(RAL_pinRegister(GPIOB, 4, INPUT, PUSH_PULL, LOW, PUD) != RAL_OK) Error_Handler();
-//  PinConfig myButton = {0};
-//  PinConfig myDiode = {0};
-//
-//  myButton.port = GPIOB;
-//  myButton.pin_number = 4;
-//  myButton.mode = INPUT;
-//  myButton.type = PUSH_PULL;
-//  myButton.pullResistor = NO_PUPD;
-//  myButton.speed = LOW;
-//  myButton.configure(&myButton);
-//
-//  myDiode.port = GPIOA;
-//  myDiode.pin_number = 0;
-//  myDiode.mode = OUTPUT;
-//  myDiode.type = PUSH_PULL;
-//  myDiode.pullResistor = NO_PUPD;
-//  myDiode.speed = LOW;
-//  myDiode.configure(&myDiode);
-
   /* USER CODE END Init */
 
   /* Configure the system clock */
@@ -174,36 +153,43 @@ int main(void)
   MX_GPIO_Init();
   /* USER CODE BEGIN 2 */
 
-  PinConfig myButton = {0};
-  PinConfig myDiode = {0};
+  PinConfig BTN_green = {0};
+  PinConfig LED_green = {0};
+  PinConfig BTN_yellow = {0};
+  PinConfig LED_yellow = {0};
 
-  myButton.port = GPIOB;
-  myButton.pin_number = 4;
-  myButton.mode = INPUT;
-  myButton.type = PUSH_PULL;
-  myButton.pullResistor = NO_PUPD;
-  myButton.speed = LOW;
-  myButton.initLevel = PIN_LOW;
-  myButton.configure = RAL_pinRegister;
-  myButton.read = RAL_readPin;
-  myButton.write = RAL_writePin;
-  if(myButton.configure(&myButton) != RAL_OK) Error_Handler();
-  if(myButton.write(&myButton, myButton.initLevel) != RAL_OK) Error_Handler();
-  if(myButton.read(&myButton) != myButton.initLevel) Error_Handler();
-
-  myDiode.port = GPIOA;
-  myDiode.pin_number = 0;
-  myDiode.mode = OUTPUT;
-  myDiode.type = PUSH_PULL;
-  myDiode.pullResistor = NO_PUPD;
-  myDiode.speed = LOW;
-  myDiode.initLevel = PIN_LOW;
-  myDiode.configure = RAL_pinRegister;
-  myDiode.read = RAL_readPin;
-  myDiode.write = RAL_writePin;
-  if(myDiode.configure(&myDiode) != RAL_OK) Error_Handler();
-  if(myDiode.write(&myDiode, myDiode.initLevel) != RAL_OK) Error_Handler();
-  if(myDiode.read(&myDiode) != myDiode.initLevel) Error_Handler();
+  RAL_pinRegister(&BTN_green,
+				  GPIOB,
+				  4,
+				  INPUT,
+				  PUSH_PULL,
+				  LOW,
+				  PULL_DOWN,
+				  PIN_LOW);
+  RAL_pinRegister(&LED_green,
+				  GPIOA,
+				  0,
+				  OUTPUT,
+				  PUSH_PULL,
+				  LOW,
+				  NO_PUPD,
+				  PIN_LOW);
+  RAL_pinRegister(&BTN_yellow,
+				  GPIOB,
+				  3,
+				  INPUT,
+				  PUSH_PULL,
+				  LOW,
+				  PULL_DOWN,
+				  PIN_LOW);
+  RAL_pinRegister(&LED_yellow,
+				  GPIOA,
+				  1,
+				  OUTPUT,
+				  PUSH_PULL,
+				  LOW,
+				  NO_PUPD,
+				  PIN_LOW);
 
   /* USER CODE END 2 */
 
@@ -213,17 +199,17 @@ int main(void)
   while (1)
   {
 
-	  if (myButton.read(&myButton) == PIN_HI) {
-		  myDiode.write(&myDiode, PIN_HI);
+	  if (BTN_green.read(&BTN_green) == PIN_HI) {
+		  LED_green.write(&LED_green, PIN_HI);
 	  } else {
-		  myDiode.write(&myDiode, PIN_LOW);
+		  LED_green.write(&LED_green, PIN_LOW);
 	  }
 
-//	  if(RAL_readPin(GPIOB, 4) == PIN_HI) {
-//		  RAL_writePin(GPIOA, 0, PIN_HI);
-//	  } else if(RAL_readPin(GPIOB, 4) == PIN_LOW){
-//		  RAL_writePin(GPIOA, 0, PIN_LOW);
-//	  }
+	  if (BTN_green.read(&BTN_yellow) == PIN_HI) {
+		  LED_green.write(&LED_yellow, PIN_HI);
+	  } else {
+		  LED_green.write(&LED_yellow, PIN_LOW);
+	  }
 
     /* USER CODE END WHILE */
 
@@ -328,39 +314,28 @@ RAL_Status RAL_portClockEnable(GPIO_TypeDef* GPIO) {
 	return RAL_ERROR;
 }
 
-RAL_Status RAL_pinRegister(PinConfig *pin) {
+RAL_Status RAL_pinConfig(PinConfig *pin) {
 
 	if (pin == NULL || pin->port == NULL) {
-		return RAL_ERROR;  // Add appropriate error handling
+		return RAL_ERROR;
 	}
 
 	GPIO_TypeDef* GPIO = pin->port;
-	uint32_t pinNumber = pin->pin_number;
 	uint32_t mode = (uint32_t)pin->mode;
 	uint32_t type = (uint32_t)pin->type;
 	uint32_t speed = (uint32_t)pin->speed;
 	uint32_t pullResistor = (uint32_t)pin->pullResistor;
+	int pinNumber = pin->pin_number;
 
-	//set GPIO port AHB bus clock
 	RAL_portClockEnable(GPIO);
 
-	if(mode == OUTPUT) {
-		//set GPIO pin mode
-		setBitHandler(GPIO->MODER, mode, 0b11U, pinNumber * 2);
-		//set type of pin
-		setBitHandler(GPIO->OTYPER, type, 0b1U, pinNumber);
-		//set the output speed
-		setBitHandler(GPIO->OSPEEDR, speed, 0b11U, pinNumber * 2);
-		//set pull-up/pull-down
-		setBitHandler(GPIO->PUPDR, pullResistor, 0b11U, pinNumber * 2);
-	} else if (mode == INPUT){
-		setBitHandler(GPIO->MODER, mode, 0b11U, pinNumber * 2);
-		setBitHandler(GPIO->PUPDR, pullResistor, 0b11U, pinNumber * 2);
-	}
-
+	setBitHandler(&GPIO->MODER, mode, 0b11U, pinNumber * 2);
+	setBitHandler(&GPIO->OTYPER, type, 0b1U, pinNumber);
+	setBitHandler(&GPIO->OSPEEDR, speed, 0b11U, pinNumber * 2);
+	setBitHandler(&GPIO->PUPDR, pullResistor, 0b11U, pinNumber * 2);
 
 	if(
-	   mode == OUTPUT &&
+		pin->mode == OUTPUT &&
 	   (GPIO->MODER >> (pinNumber * 2) & 0x3U) == mode &&
 	   (GPIO->OTYPER >> pinNumber & 0x1U) == type &&
 	   (GPIO->OSPEEDR >> (pinNumber * 2) & 0x3U) == speed &&
@@ -368,7 +343,7 @@ RAL_Status RAL_pinRegister(PinConfig *pin) {
 	  ) return RAL_OK;
 
 	if(
-	   mode == INPUT &&
+		pin->mode == INPUT &&
 	   (GPIO->MODER >> (pinNumber * 2) & 0x3U) == mode
       ) return RAL_OK;
 
@@ -378,33 +353,39 @@ RAL_Status RAL_pinRegister(PinConfig *pin) {
 RAL_Status RAL_writePin(PinConfig *pin, RAL_PinLevel level) {
 
 	if (pin == NULL || pin->port == NULL) {
-		return PIN_LOW;  // Add appropriate error handling
+		return RAL_ERROR;  // Add appropriate error handling
 	}
 
 	GPIO_TypeDef* GPIO = pin->port;
-	uint32_t pinNumber = pin->pin_number;
+	int pinNumber = pin->pin_number;
 	uint32_t pinSetBit = 1U << pinNumber;
 	uint32_t pinResetBit = 1U << (pinNumber + 16);
 
-	if(level) {
-		GPIO->BSRR &= ~pinResetBit;
-		GPIO->BSRR |= pinSetBit;
+	if(level == PIN_HI) {
+		setBitHandler(&GPIO->BSRR, level, 0b1U, pinNumber);
+		setBitHandler(&GPIO->BSRR, ~level, 0b1U, pinNumber + 16);
+	} else if (level == PIN_LOW) {
+		setBitHandler(&GPIO->BSRR, level, 0b1U, pinNumber);
+		setBitHandler(&GPIO->BSRR, ~level, 0b1U, pinNumber + 16);
 	} else {
-		GPIO->BSRR &= ~pinSetBit;
-		GPIO->BSRR |= pinResetBit;
+		return RAL_ERROR;
 	}
 
 	if(
 		 level == PIN_HI &&
 		(GPIO->BSRR & pinSetBit) == 1 &&
 		(GPIO->BSRR & pinResetBit) == 0
-	  ) return RAL_ERROR;
+	  ) {
+		return RAL_ERROR;
+	}
 
 	if(
 		 level != PIN_LOW &&
 		(GPIO->BSRR & pinSetBit) == 0 &&
 		(GPIO->BSRR & pinResetBit) == 1
-	  ) return RAL_ERROR;
+	  ) {
+		return RAL_ERROR;
+	}
 
 	return RAL_OK;
 }
@@ -413,30 +394,42 @@ RAL_Status RAL_writePin(PinConfig *pin, RAL_PinLevel level) {
 RAL_PinLevel RAL_readPin(PinConfig *pin) {
 
 	GPIO_TypeDef* GPIO = pin->port;
-	uint32_t pinNumber = pin->pin_number;
+	int pinNumber = pin->pin_number;
 
 	return (GPIO->IDR & (1U << pinNumber)) ? PIN_HI : PIN_LOW;
 
 }
 
-//RAL_Status configurePin(PinConfig *pin) {
-//    return RAL_pinRegister(
-//        pin->port,
-//        pin->pin_number,
-//        pin->mode,
-//        pin->type,
-//        pin->speed,
-//        pin->pullResistor
-//    );
-//}
-//
-//RAL_PinLevel readPin(PinConfig *pin) {
-//    return RAL_readPin(pin->port, pin->pin_number);
-//}
-//
-//RAL_Status writePin(PinConfig *pin, RAL_PinLevel level) {
-//    return RAL_writePin(pin->port, pin->pin_number, level);
-//}
+RAL_Status RAL_pinRegister(
+							PinConfig *pin,
+							GPIO_TypeDef* port,
+							int pin_number,
+							RAL_PinMode initMode,
+							RAL_PinOutputType initType,
+							RAL_PinOutputSpeed initSpeed,
+							RAL_PinPullUpPullDownResistor initResistor,
+							RAL_PinLevel initLevel
+							) {
+
+	pin->port = port;
+	pin->pin_number = pin_number;
+	pin->mode = initMode;
+	pin->type = initType;
+	pin->pullResistor = initResistor;
+	pin->speed = initSpeed;
+	pin->initLevel = initLevel;
+	pin->configure = RAL_pinConfig;
+	pin->read = RAL_readPin;
+	pin->write = RAL_writePin;
+	if(pin->configure(pin) != RAL_OK) return RAL_ERROR;
+	if(pin->write(pin, initLevel) != RAL_OK) return RAL_ERROR;
+	if(pin->read(pin) != initLevel) return RAL_ERROR;
+
+	return RAL_OK;
+
+}
+
+
 
 /* USER CODE END 4 */
 
@@ -451,7 +444,6 @@ void Error_Handler(void)
   __disable_irq();
   while (1)
   {
-	  errorMessage[128] = copystr();
   }
   /* USER CODE END Error_Handler_Debug */
 }
