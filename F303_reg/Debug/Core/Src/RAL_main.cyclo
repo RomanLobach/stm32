@@ -1,0 +1,6 @@
+../Core/Src/RAL_main.c:11:6:setBitHandler	1
+../Core/Src/RAL_main.c:22:12:RAL_portClockEnable	9
+../Core/Src/RAL_main.c:45:12:RAL_pinConfig	10
+../Core/Src/RAL_main.c:85:12:RAL_writePin	11
+../Core/Src/RAL_main.c:126:14:RAL_readPin	1
+../Core/Src/RAL_main.c:135:12:RAL_pinRegister	4

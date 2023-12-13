@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <section name="Workbench">
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
-		<item key="selection" value=""/>
+		<item key="selection" value="ssd1306_SetContrast(0xFF);"/>
 		<item key="wrap" value="true"/>
 		<item key="casesensitive" value="true"/>
 		<item key="wholeword" value="false"/>
 		<item key="incremental" value="false"/>
 		<item key="isRegEx" value="false"/>
 		<list key="findhistory">
+			<item value="i2c"/>
+			<item value="SysTick"/>
 			<item value="RAL_pinRegister"/>
 			<item value="pupd"/>
 			<item value="PIN"/>
@@ -21,7 +23,6 @@
 			<item value="HAL_GPIO_WritePin"/>
 			<item value="MODE"/>
 			<item value="mode"/>
-			<item value="BTN_RED_isPressed"/>
 		</list>
 		<list key="replacehistory">
 			<item value=""/>

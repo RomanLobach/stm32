@@ -1,0 +1,8 @@
+../Core/Src/BME.c:37:6:TrimRead	1
+../Core/Src/BME.c:86:5:BME280_Config	8
+../Core/Src/BME.c:150:5:BMEReadRaw	2
+../Core/Src/BME.c:178:6:BME280_WakeUP	1
+../Core/Src/BME.c:200:9:BME280_compensate_T_int32	1
+../Core/Src/BME.c:215:10:BME280_compensate_P_int64	2
+../Core/Src/BME.c:271:10:bme280_compensate_H_int32	1
+../Core/Src/BME.c:292:6:BME280_Measure	5

@@ -23,7 +23,15 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
  ../Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_hal_i2c.h \
  ../Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_hal_i2c_ex.h \
  ../Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_hal_pwr.h \
- ../Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_hal_pwr_ex.h
+ ../Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_hal_pwr_ex.h \
+ ../Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_hal_spi.h \
+ ../Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_hal_spi_ex.h \
+ ../Core/Inc/i2c.h ../Core/Inc/main.h ../Core/Inc/spi.h \
+ ../Core/Inc/gpio.h ../Core/Inc/RAL_main.h \
+ /Users/romanlobach/Documents/stm32/F303_reg/Drivers/ssd1306/ssd1306.h \
+ /Users/romanlobach/Documents/stm32/F303_reg/Drivers/ssd1306/ssd1306_conf.h \
+ /Users/romanlobach/Documents/stm32/F303_reg/Drivers/ssd1306/ssd1306_fonts.h \
+ ../Core/Inc/BME.h
 ../Core/Inc/main.h:
 ../Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_hal.h:
 ../Core/Inc/stm32f3xx_hal_conf.h:
@@ -50,3 +58,14 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
 ../Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_hal_i2c_ex.h:
 ../Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_hal_pwr.h:
 ../Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_hal_pwr_ex.h:
+../Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_hal_spi.h:
+../Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_hal_spi_ex.h:
+../Core/Inc/i2c.h:
+../Core/Inc/main.h:
+../Core/Inc/spi.h:
+../Core/Inc/gpio.h:
+../Core/Inc/RAL_main.h:
+/Users/romanlobach/Documents/stm32/F303_reg/Drivers/ssd1306/ssd1306.h:
+/Users/romanlobach/Documents/stm32/F303_reg/Drivers/ssd1306/ssd1306_conf.h:
+/Users/romanlobach/Documents/stm32/F303_reg/Drivers/ssd1306/ssd1306_fonts.h:
+../Core/Inc/BME.h:
